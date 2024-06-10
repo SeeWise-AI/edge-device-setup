@@ -114,9 +114,6 @@ def main():
     if not os.path.isfile('yolo/%s.trt' % args.model):
         raise SystemExit('ERROR: file (yolo/%s.trt) not found!' % args.model)
 
-    if not cam.isOpened():
-        raise SystemExit('ERROR: failed to open camera!')
-
     threads = []
     num_cameras = 6 
     camera_path = ['test.mp4', 'test_2.mp4', 'test_3.mp4', 'test_4.mp4', 'test_5.mp4']
