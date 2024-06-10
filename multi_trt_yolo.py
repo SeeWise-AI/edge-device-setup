@@ -13,6 +13,8 @@ import threading
 import cv2
 import pycuda.autoinit  # This is needed for initializing CUDA driver
 
+import pycuda.driver as cuda # this is needed for cuda context
+
 from utils.yolo_classes import get_cls_dict
 from utils.camera import add_camera_args, Camera
 from utils.display import open_window, set_display, show_fps
