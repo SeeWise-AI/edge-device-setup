@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Update package list and install python3-pip
-sudo apt update
-sudo apt install -y python3-pip
+# # Update package list and install python3-pip
+# sudo apt update
+# sudo apt install -y python3-pip
 
-# Install jetson-stats
-sudo pip3 install jetson-stats
+# # Install jetson-stats
+# sudo pip3 install jetson-stats
 
-# Install pycuda (user installation)
-pip3 install pycuda --user
+# # Install pycuda (user installation)
+# pip3 install pycuda --user
 
-# Install ONNX
-sudo pip3 install onnx
+# # Install ONNX
+# sudo pip3 install onnx
 
 # Change directory to plugin and compile
 cd plugin || { echo "Directory 'plugin' not found"; exit 1; }
