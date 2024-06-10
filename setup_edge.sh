@@ -13,14 +13,17 @@
 # # Install ONNX
 # sudo pip3 install onnx
 
-# Change directory to plugin and compile
-cd plugins || { echo "Directory 'plugins' not found"; exit 1; }
-make
+# # Change directory to plugin and compile
+# cd plugins || { echo "Directory 'plugins' not found"; exit 1; }
+# make
 
-# Download YOLOv3-tiny config and weights
-cd ..
-wget https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg -q --show-progress --no-clobber
-wget https://pjreddie.com/media/files/yolov3-tiny.weights -q --show-progress --no-clobber
+# # Download YOLOv3-tiny config and weights
+# cd ..
+# echo "downloading yolo cfg...."
+# wget https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg -q --show-progress --no-clobber
+
+# echo "downloading yolo weights...."
+# wget https://pjreddie.com/media/files/yolov3-tiny.weights -q --show-progress --no-clobber
 
 # Create yolov3-tiny-288.cfg and yolov3-tiny-288.weights
 echo
