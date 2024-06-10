@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# # Update package list and install python3-pip
-# sudo apt update
-# sudo apt install -y python3-pip
+# Update package list and install python3-pip
+sudo apt update
+sudo apt install -y python3-pip
 
-# # Install jetson-stats
-# sudo pip3 install jetson-stats
+# Install jetson-stats
+sudo pip3 install jetson-stats
 
-# # Install pycuda (user installation)
-# pip3 install pycuda 
+# Install pycuda (user installation)
+pip3 install pycuda 
 
-# # Install ONNX
-# sudo pip3 install onnx
+# Install ONNX
+sudo pip3 install onnx
 
-# # Change directory to plugin and compile
-# cd plugins || { echo "Directory 'plugins' not found"; exit 1; }
-# make
+# Change directory to plugin and compile
+cd plugins || { echo "Directory 'plugins' not found"; exit 1; }
+make
 
-# # Download YOLOv3-tiny config and weights
-# cd ..
-# echo "downloading yolo cfg...."
-# wget https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg -q --show-progress --no-clobber
+# Download YOLOv3-tiny config and weights
+cd ..
+echo "downloading yolo cfg...."
+wget https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov3-tiny.cfg -q --show-progress --no-clobber
 
-# echo "downloading yolo weights...."
-# wget https://pjreddie.com/media/files/yolov3-tiny.weights -q --show-progress --no-clobber
+echo "downloading yolo weights...."
+wget https://pjreddie.com/media/files/yolov3-tiny.weights -q --show-progress --no-clobber
 
 # Create yolov3-tiny-288.cfg and yolov3-tiny-288.weights
 echo
@@ -39,6 +39,9 @@ echo >> yolov3-tiny-416.cfg
 ln -sf yolov3-tiny.weights yolov3-tiny-416.weights
 
 # Convert YOLOv3-tiny models to ONNX and TensorRT
+cd ..
+cd yolo || { echo "Directory 'yolo' not found"; exit 1; }
+
 python3 yolo_to_onnx.py -m yolov3-tiny-416
 python3 onnx_to_tensorrt.py -m yolov3-tiny-416
 
