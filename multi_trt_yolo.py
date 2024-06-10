@@ -88,23 +88,23 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
             full_scrn = not full_scrn
             set_display(WINDOW_NAME, full_scrn)
     
-    def camera_thread(args, cam_id, path):
-        print(f"Starting camera {cam_id}")
-        cam = Camera(args, path)
-        if not cam.isOpened():
-            raise SystemExit(f'ERROR: failed to open camera {cam_id}!')
+def camera_thread(args, cam_id, path):
+    print(f"Starting camera {cam_id}")
+    cam = Camera(args, path)
+    if not cam.isOpened():
+        raise SystemExit(f'ERROR: failed to open camera {cam_id}!')
 
-        cls_dict = get_cls_dict(args.category_num)
-        vis = BBoxVisualization(cls_dict)
-        trt_yolo = TrtYOLO(args.model, args.category_num, args.letter_box)
+    cls_dict = get_cls_dict(args.category_num)
+    vis = BBoxVisualization(cls_dict)
+    trt_yolo = TrtYOLO(args.model, args.category_num, args.letter_box)
 
-        window_name = f"Camera {cam_id}"
-        open_window(window_name, f'Camera {cam_id} TensorRT YOLO Demo', cam.img_width, cam.img_height)
-        loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis)
+    window_name = f"Camera {cam_id}"
+    open_window(window_name, f'Camera {cam_id} TensorRT YOLO Demo', cam.img_width, cam.img_height)
+    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis)
 
-        cam.release()
-        cv2.destroyAllWindows()
-        print(f"Camera {cam_id} stopped")
+    cam.release()
+    cv2.destroyAllWindows()
+    print(f"Camera {cam_id} stopped")
 
 
 def main():
