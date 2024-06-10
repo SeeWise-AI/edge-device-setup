@@ -207,8 +207,8 @@ class Camera():
                 raise RuntimeError('no camera type specified!')
         else:
             logging.info('Camera: using a video file for multi trial %s' % a.video)
-            self.video_file = camera_path
-            self.cap = cv2.VideoCapture(camera_path)
+            self.video_file = self.camera_path
+            self.cap = cv2.VideoCapture(self.camera_path)
             self._start()
 
     def isOpened(self):
