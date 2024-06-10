@@ -43,6 +43,8 @@ def add_camera_args(parser):
                         help='Jetson onboard camera [None]')
     parser.add_argument('--copy_frame', action='store_true',
                         help=('copy video frame internally [False]'))
+    parser.add_argument('--multi_thread', action='store_true',
+                        help=('multi thread internally [False]'))
     parser.add_argument('--do_resize', action='store_true',
                         help=('resize image/video [False]'))
     parser.add_argument('--width', type=int, default=640,
@@ -160,6 +162,7 @@ class Camera():
         self.img_height = 416
         self.cap = None
         self.thread = None
+        self.multi_thread = args.multi_thread
         self.camera_path = lst_of_camera
         self._open()  # try to open the camera
 
@@ -168,39 +171,45 @@ class Camera():
         if self.cap is not None:
             raise RuntimeError('camera is already opened!')
         a = self.args
-        if a.image:
-            logging.info('Camera: using a image file %s' % a.image)
-            self.cap = 'image'
-            self.img_handle = cv2.imread(a.image)
-            if self.img_handle is not None:
-                if self.do_resize:
-                    self.img_handle = cv2.resize(
-                        self.img_handle, (a.width, a.height))
-                self.is_opened = True
-                self.img_height, self.img_width, _ = self.img_handle.shape
-        elif a.video:
-            logging.info('Camera: using a video file %s' % a.video)
-            self.video_file = a.video
-            self.cap = cv2.VideoCapture(a.video)
-            self._start()
-        elif a.rtsp:
-            logging.info('Camera: using RTSP stream %s' % a.rtsp)
-            self.cap = open_cam_rtsp(a.rtsp, a.width, a.height, a.rtsp_latency)
-            self._start()
-        elif a.usb is not None:
-            logging.info('Camera: using USB webcam /dev/video%d' % a.usb)
-            self.cap = open_cam_usb(a.usb, a.width, a.height)
-            self._start()
-        elif a.gstr is not None:
-            logging.info('Camera: using GStreamer string "%s"' % a.gstr)
-            self.cap = open_cam_gstr(a.gstr, a.width, a.height)
-            self._start()
-        elif a.onboard is not None:
-            logging.info('Camera: using Jetson onboard camera')
-            self.cap = open_cam_onboard(a.width, a.height)
-            self._start()
+        if not self.multi_thread:
+            if a.image:
+                logging.info('Camera: using a image file %s' % a.image)
+                self.cap = 'image'
+                self.img_handle = cv2.imread(a.image)
+                if self.img_handle is not None:
+                    if self.do_resize:
+                        self.img_handle = cv2.resize(
+                            self.img_handle, (a.width, a.height))
+                    self.is_opened = True
+                    self.img_height, self.img_width, _ = self.img_handle.shape
+            elif a.video:
+                logging.info('Camera: using a video file %s' % a.video)
+                self.video_file = a.video
+                self.cap = cv2.VideoCapture(a.video)
+                self._start()
+            elif a.rtsp:
+                logging.info('Camera: using RTSP stream %s' % a.rtsp)
+                self.cap = open_cam_rtsp(a.rtsp, a.width, a.height, a.rtsp_latency)
+                self._start()
+            elif a.usb is not None:
+                logging.info('Camera: using USB webcam /dev/video%d' % a.usb)
+                self.cap = open_cam_usb(a.usb, a.width, a.height)
+                self._start()
+            elif a.gstr is not None:
+                logging.info('Camera: using GStreamer string "%s"' % a.gstr)
+                self.cap = open_cam_gstr(a.gstr, a.width, a.height)
+                self._start()
+            elif a.onboard is not None:
+                logging.info('Camera: using Jetson onboard camera')
+                self.cap = open_cam_onboard(a.width, a.height)
+                self._start()
+            else:
+                raise RuntimeError('no camera type specified!')
         else:
-            raise RuntimeError('no camera type specified!')
+            logging.info('Camera: using a video file for multi trial %s' % a.video)
+            self.video_file = camera_path
+            self.cap = cv2.VideoCapture(camera_path)
+            self._start()
 
     def isOpened(self):
         return self.is_opened
