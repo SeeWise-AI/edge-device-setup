@@ -8,13 +8,13 @@
 # sudo pip3 install jetson-stats
 
 # # Install pycuda (user installation)
-# pip3 install pycuda --user
+# pip3 install pycuda 
 
 # # Install ONNX
 # sudo pip3 install onnx
 
 # Change directory to plugin and compile
-cd plugin || { echo "Directory 'plugin' not found"; exit 1; }
+cd plugins || { echo "Directory 'plugins' not found"; exit 1; }
 make
 
 # Download YOLOv3-tiny config and weights
