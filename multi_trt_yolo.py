@@ -123,7 +123,7 @@ def main():
         raise SystemExit('ERROR: file (yolo/%s.trt) not found!' % args.model)
 
     threads = []
-    camera_path = ['test.mp4', 'test_1.mp4', 'test_1.mp4']  # 'test_4.mp4', 'test_5.mp4'
+    camera_path = ['test.mp4']  # 'test_4.mp4', 'test_5.mp4'
     num_cameras = len(camera_path)
     for i in range(num_cameras):
         thread = threading.Thread(target=camera_thread, args=(args, i, camera_path[i]))
