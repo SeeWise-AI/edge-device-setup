@@ -149,7 +149,7 @@ class Camera():
     5. Jetson onboard camera
     """
 
-    def __init__(self, args, lst_of_camera):
+    def __init__(self, args, lst_of_camera=None):
         self.args = args
         self.is_opened = False
         self.video_file = ''
