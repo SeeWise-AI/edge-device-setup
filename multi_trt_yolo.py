@@ -122,16 +122,19 @@ def main():
     if not os.path.isfile('yolo/%s.trt' % args.model):
         raise SystemExit('ERROR: file (yolo/%s.trt) not found!' % args.model)
 
-    threads = []
-    camera_path = ['test.mp4']  # 'test_4.mp4', 'test_5.mp4'
-    num_cameras = len(camera_path)
+    processes = []
+    num_cameras = 3 
+    camera_path = ['test.mp4', 'test_1.mp4', 'test_1.mp4']  # 'test_4.mp4', 'test_5.mp4'
     for i in range(num_cameras):
-        thread = threading.Thread(target=camera_thread, args=(args, i, camera_path[i]))
-        threads.append(thread)
-        thread.start()
+        process = multiprocessing.Process(target=camera_thread, args=(args, i, camera_path[i]))
+        processes.append(process)
+        process.start()
 
-    for thread in threads:
-        thread.join()
+    for process in processes:
+        process.join()
+
+    # for thread in threads:
+    #     thread.join()
 
 
 if __name__ == '__main__':
