@@ -9,6 +9,7 @@ import cv2
 
 def open_window(window_name, title, width=None, height=None):
     """Open the display window."""
+    print("Opening the window.")
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     cv2.setWindowTitle(window_name, title)
     if width and height:
