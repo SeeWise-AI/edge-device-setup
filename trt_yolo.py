@@ -12,7 +12,8 @@ import argparse
 import cv2
 import pycuda.autoinit  # This is needed for initializing CUDA driver
 
-from utils.yolo_classes import get_cls_dict
+# from utils.yolo_classes import get_cls_dict
+from utils.yolo_lnt_classes import get_cls_dict
 from utils.camera import add_camera_args, Camera
 from utils.display import open_window, set_display, show_fps
 from utils.visualization import BBoxVisualization
@@ -30,7 +31,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=desc)
     parser = add_camera_args(parser)
     parser.add_argument(
-        '-c', '--category_num', type=int, default=80,
+        '-c', '--category_num', type=int, default=2,
         help='number of object categories [80]')
     parser.add_argument(
         '-t', '--conf_thresh', type=float, default=0.3,
