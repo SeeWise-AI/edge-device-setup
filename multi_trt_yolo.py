@@ -19,6 +19,8 @@ from utils.camera_multi import add_camera_args, Camera
 from utils.display import open_window, set_display, show_fps
 from utils.visualization import BBoxVisualization
 from utils.yolo_with_plugins import TrtYOLO
+from paddleocr import PaddleOCR
+import easyocr
 
 WINDOW_NAME = 'TrtYOLODemo'
 
@@ -55,10 +57,12 @@ def parse_args():
         help='list of camera paths')
     parser.add_argument('-mp','--model_path', type=str, nargs='+', required=True,
         help='list of model path and should be came in the order of camera')
+    parser.add_argument('-ocr','--ocr_model', type=str, nargs='+', required=False,
+        help='OCR model needs to shared if you need to perform ocr')
     args = parser.parse_args()
     return args
 
-def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name):
+def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
     """Continuously capture images from camera and do object detection.
 
     # Arguments
@@ -71,13 +75,33 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name):
     full_scrn = False
     fps = 0.0
     tic = time.time()
+    
+    if ocr_model is not None:
+        if ocr_model == 'easyocr':
+            ocr = easyocr.Reader(['en'], gpu=True)
+        else:
+            ocr = PaddleOCR(use_angle_cls=True, lang='en')
+
     while True:
         if cv2.getWindowProperty(window_name, 0) < 0:
             break
         img = cam.read()
         if img is None:
             break
-        boxes, confs, clss = trt_yolo.detect(img, conf_th)
+
+        if ocr_model is not None:
+            for box in boxes:
+                x1, y1, x2, y2 = map(int, box)
+                cropped_img = img[y1:y2, x1:x2]
+                if ocr_model == 'easyocr':
+                    result = ocr.readtext(cropped_img)
+                    text = " ".join([res[1] for res in result])
+                else:
+                    result = ocr.ocr(cropped_img)
+                    text = " ".join([line[-1][0] for line in result])
+
+                cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
         cv2.imshow(window_name, img)
@@ -101,7 +125,10 @@ def process_camera(args, cam_index):
 
     cls_dict = get_cls_dict(args.category_num)
     vis = BBoxVisualization(cls_dict)
-    trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box)
+    if args.ocr_model:
+        trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box, args.ocr_model)
+    else:
+        trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box)
 
     window_name = f"{WINDOW_NAME}_{cam_index}"
     open_window(window_name, f'Camera TensorRT YOLO Demo {cam_index}',
