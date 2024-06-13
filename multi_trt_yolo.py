@@ -102,12 +102,14 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                     cropped_img = img[y1:y2, x1:x2]
                     if ocr_model == 'easyocr':
                         result = ocr.readtext(cropped_img)
+                        print(result, "---")
                         if result is not None:
                             text = " ".join([res[1] for res in result])
                         else:
                             print("beam id not found")
                     else:
                         result = ocr.ocr(cropped_img)
+                        print(result, "---")
                         if result is not None:
                             text = " ".join([line[-1][0] for line in result])
                         else:
