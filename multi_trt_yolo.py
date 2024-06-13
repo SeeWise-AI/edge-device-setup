@@ -78,8 +78,10 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
 
     if ocr_model is not None:
         if ocr_model == 'easyocr':
+            print("Initializing easyocr....")
             ocr = easyocr.Reader(['en'], gpu=True)
         else:
+            print("Initializing paddle ocr....")
             ocr = PaddleOCR(use_angle_cls=True, lang='en')
 
     while True:
@@ -92,6 +94,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
         boxes, confs, clss = trt_yolo.detect(img, conf_th)
 
         if ocr_model is not None:
+            print(ocr_model, "----")
+            print(boxes, confs, clss)
             if clss == 'beam':
                 for box in boxes:
                     x1, y1, x2, y2 = map(int, box)
