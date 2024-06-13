@@ -53,6 +53,8 @@ def parse_args():
     parser.add_argument(
         '-p', '--camera_paths', type=str, nargs='+', required=True,
         help='list of camera paths')
+    parser.add_argument('-mp','--model_path', type=str, nargs='+', required=True,
+        help='list of model path and should be came in the order of camera')
     args = parser.parse_args()
     return args
 
@@ -99,7 +101,7 @@ def process_camera(args, cam_index):
 
     cls_dict = get_cls_dict(args.category_num)
     vis = BBoxVisualization(cls_dict)
-    trt_yolo = TrtYOLO(args.model, args.category_num, args.letter_box)
+    trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box)
 
     window_name = f"{WINDOW_NAME}_{cam_index}"
     open_window(window_name, f'Camera TensorRT YOLO Demo {cam_index}',
