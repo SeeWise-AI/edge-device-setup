@@ -129,14 +129,14 @@ def process_camera(args, cam_index):
     cls_dict = get_cls_dict(args.category_num)
     vis = BBoxVisualization(cls_dict)
     if args.ocr_model:
-        trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box, args.ocr_model)
+        trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box)
     else:
         trt_yolo = TrtYOLO(args.model_path[cam_index], args.category_num, args.letter_box)
 
     window_name = f"{WINDOW_NAME}_{cam_index}"
     open_window(window_name, f'Camera TensorRT YOLO Demo {cam_index}',
                 cam.img_width, cam.img_height)
-    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name)
+    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name, ocr_model=args.ocr_model)
 
     cam.release()
     cv2.destroyAllWindows()
