@@ -105,6 +105,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                         print(result, "---")
                         if result[0] is not None:
                             text = " ".join([res[1] for res in result])
+                            cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                         else:
                             print("beam id not found")
                     else:
@@ -112,10 +113,11 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                         print(result, "---")
                         if result[0] is not None:
                             text = " ".join([line[-1][0] for line in result])
+                            cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                         else:
                             print("Beam id is not found..")
 
-                    cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
