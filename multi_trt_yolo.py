@@ -77,7 +77,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
     tic = time.time()
 
     if ocr_model is not None:
-        if ocr_model == 'easyocr':
+        if ocr_model[0] == 'easyocr':
             print("Initializing easyocr....")
             ocr = easyocr.Reader(['en'], gpu=True)
         else:
