@@ -75,7 +75,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
     full_scrn = False
     fps = 0.0
     tic = time.time()
-    
+
     if ocr_model is not None:
         if ocr_model == 'easyocr':
             ocr = easyocr.Reader(['en'], gpu=True)
@@ -88,19 +88,22 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
         img = cam.read()
         if img is None:
             break
+        
+        boxes, confs, clss = trt_yolo.detect(img, conf_th)
 
         if ocr_model is not None:
-            for box in boxes:
-                x1, y1, x2, y2 = map(int, box)
-                cropped_img = img[y1:y2, x1:x2]
-                if ocr_model == 'easyocr':
-                    result = ocr.readtext(cropped_img)
-                    text = " ".join([res[1] for res in result])
-                else:
-                    result = ocr.ocr(cropped_img)
-                    text = " ".join([line[-1][0] for line in result])
+            if clss == 'beam':
+                for box in boxes:
+                    x1, y1, x2, y2 = map(int, box)
+                    cropped_img = img[y1:y2, x1:x2]
+                    if ocr_model == 'easyocr':
+                        result = ocr.readtext(cropped_img)
+                        text = " ".join([res[1] for res in result])
+                    else:
+                        result = ocr.ocr(cropped_img)
+                        text = " ".join([line[-1][0] for line in result])
 
-                cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
