@@ -100,7 +100,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                 if cls_id == 1:  
                     x1, y1, x2, y2 = map(int, box)
                     cropped_img = img[y1:y2, x1:x2]
-                    cv2.imshow(cropped_img, "check")
+                    cv2.imshow("check", cropped_img)
                     if ocr_model == 'easyocr':
                         result = ocr.readtext(cropped_img)
                         print(result, "---")
