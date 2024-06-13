@@ -39,7 +39,7 @@ def parse_args():
         '-mt', '--multi_trial', type=float, default=1,  # 1 means false 0 means true
         help='set the detection confidence threshold')
     parser.add_argument(
-        '-m', '--model', type=str, required=True,
+        '-m', '--model', type=str, required=False,
         help=('[yolov3-tiny|yolov3|yolov3-spp|yolov4-tiny|yolov4|'
               'yolov4-csp|yolov4x-mish|yolov4-p5]-[{dimension}], where '
               '{dimension} could be either a single number (e.g. '
