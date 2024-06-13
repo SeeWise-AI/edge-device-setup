@@ -115,7 +115,14 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                         result = ocr.ocr(cropped_img)
                         print(result, "---")
                         if result[0] is not None:
-                            text = " ".join([line[-1][0] for line in result])
+                            text = " "
+                            for line in result:
+                                for word_info in line:
+                                    if isinstance(word_info, list) and len(word_info) > 1:
+                                        text += word_info[1][0] + " "
+                            
+                            text = text.strip()
+
                             cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                         else:
                             print("Beam id is not found..")
