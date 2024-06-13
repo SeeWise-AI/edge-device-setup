@@ -94,10 +94,10 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
         boxes, confs, clss = trt_yolo.detect(img, conf_th)
 
         if ocr_model is not None:
-            print(ocr_model, "----")
-            print(boxes, confs, clss)
-            if clss == 'beam':
-                for box in boxes:
+            for box, cls_id in zip(boxes, clss):
+                print(box, "----box---")
+                print(cls_id, "------cls----")
+                if cls_id == 1:  
                     x1, y1, x2, y2 = map(int, box)
                     cropped_img = img[y1:y2, x1:x2]
                     if ocr_model == 'easyocr':
