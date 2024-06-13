@@ -115,8 +115,8 @@ def main():
     args = parse_args()
     if args.category_num <= 0:
         raise SystemExit('ERROR: bad category_num (%d)!' % args.category_num)
-    if not os.path.isfile('yolo/%s.trt' % args.model):
-        raise SystemExit('ERROR: file (yolo/%s.trt) not found!' % args.model)
+    # if not os.path.isfile('yolo/%s.trt' % args.model_path):
+    #     raise SystemExit('ERROR: file (yolo/%s.trt) not found!' % args.model)
     if args.num_cams < 1:
         raise SystemExit('ERROR: num_cams must be at least 1!')
     if len(args.camera_paths) != args.num_cams:
