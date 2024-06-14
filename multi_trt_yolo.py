@@ -103,7 +103,9 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
                     cv2.imshow("check", cropped_img)
                     if ocr_model[0] == 'easyocr':
                         result = ocr.readtext(cropped_img, allowlist='0123456789')
-                        for out in easy_ocu_out:
+                        print(result, "-------result------")
+                        print(result[0], "------result[0]--------")
+                        for out in result:
                             if len(out) >= 2:
                                 beam_val, beam_val_conf = out[1], out[2]
                         print(beam_val, "---")
