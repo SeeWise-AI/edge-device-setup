@@ -62,6 +62,7 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+
 def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
     """Continuously capture images from camera and do object detection.
 
