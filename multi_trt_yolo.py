@@ -91,8 +91,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
                     dy = int((0.65*y2-y1))
                     dx = int(0.65*(x2-x1))
 
-                    H, W = safe_frame.shape[:2]
-                    beam_crop = safe_frame.copy()[max(0, y1-dy):min(y2+dy, H), max(0, x1-dx):min(x2+dx, W)]
+                    H, W = frame.shape[:2]
+                    beam_crop = frame.copy()[max(0, y1-dy):min(y2+dy, H), max(0, x1-dx):min(x2+dx, W)]
                     beam = ocr_recgn.perform_ocr(beam_crop)
                     print(beam, "---")
 
