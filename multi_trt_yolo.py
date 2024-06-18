@@ -120,7 +120,7 @@ def process_camera(args, cam_index):
     window_name = f"{WINDOW_NAME}_{cam_index}"
     open_window(window_name, f'Camera TensorRT YOLO Demo {cam_index}',
                 cam.img_width, cam.img_height)
-    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name, ocr_model=args.ocr_model)
+    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name)
 
     cam.release()
     cv2.destroyAllWindows()
