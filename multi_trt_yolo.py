@@ -84,7 +84,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
             break
         
         boxes, confs, clss = trt_yolo.detect(img, conf_th)
-        if frame:
+        if frame is not None and frame.size > 0:
             for box, cls_id in zip(boxes, clss):
                 if cls_id == 1:  
                     x1, y1, x2, y2 = map(int, box)
