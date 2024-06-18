@@ -62,7 +62,7 @@ def parse_args():
     return args
 
 
-def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
+def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, frame=None):
     """Continuously capture images from camera and do object detection.
 
     # Arguments
@@ -84,13 +84,13 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
             break
         
         boxes, confs, clss = trt_yolo.detect(img, conf_th)
-
-        for box, cls_id in zip(boxes, clss):
-            if cls_id == 1:  
-                x1, y1, x2, y2 = map(int, box)
-                cropped_img = img[y1:y2, x1:x2]
-                beam = ocr_recgn.perform_ocr(cropped_img)
-                print(beam, "---")
+        if frame:
+            for box, cls_id in zip(boxes, clss):
+                if cls_id == 1:  
+                    x1, y1, x2, y2 = map(int, box)
+                    cropped_img = frame[y1:y2, x1:x2]
+                    beam = ocr_recgn.perform_ocr(cropped_img)
+                    print(beam, "---")
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
@@ -110,6 +110,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
 def process_camera(args, cam_index):
     """Process a single camera stream."""
     cam = Camera(args, cam_index)
+
     if not cam.isOpened():
         raise SystemExit('ERROR: failed to open camera %d!' % cam_index)
 
@@ -120,7 +121,7 @@ def process_camera(args, cam_index):
     window_name = f"{WINDOW_NAME}_{cam_index}"
     open_window(window_name, f'Camera TensorRT YOLO Demo {cam_index}',
                 cam.img_width, cam.img_height)
-    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name)
+    loop_and_detect(cam, trt_yolo, args.conf_thresh, vis=vis, window_name=window_name, frame=cam.img_handle)
 
     cam.release()
     cv2.destroyAllWindows()

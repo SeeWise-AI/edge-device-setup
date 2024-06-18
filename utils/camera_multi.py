@@ -154,6 +154,7 @@ class Camera():
         self.img_height = 416
         self.cap = None
         self.thread = None
+        self.share_frame = True
         self.multi_thread = args.multi_thread
         self.camera_path = args.camera_paths[cam_index]
         self._open()  # try to open the camera
@@ -213,6 +214,11 @@ class Camera():
 
         # Try to grab the 1st image and determine width and height
         _, self.img_handle = self.cap.read()
+
+        if self.share_frame:
+            
+           
+
         if self.img_handle is None:
             logging.warning('Camera: cap.read() returns no image!')
             self.is_opened = False
