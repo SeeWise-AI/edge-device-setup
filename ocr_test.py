@@ -15,7 +15,7 @@ result = ocr.ocr(img_path, cls=True)
 
 # Print OCR results
 for line in result:
-    print(line)
+    print(line, "----")
 
 # Extracting the detected text and boxes for visualization
 boxes = [res[0] for res in result[0]]
