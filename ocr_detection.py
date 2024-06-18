@@ -8,7 +8,7 @@ class ocr_recgn:
     def __init__(self):
         self.ocr_reader = PaddleOCR(use_angle_cls=True, lang='en')
     
-    def perform_ocr(frame):
+    def perform_ocr(self, frame):
         # img = cv2.imread(self.path)
         result = self.ocr_reader.ocr(frame, cls=True)
         

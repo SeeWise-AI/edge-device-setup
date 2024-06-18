@@ -96,8 +96,9 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
                     beam_crop = frame.copy()[max(0, y1-dy):min(y2+dy, H), max(0, x1-dx):min(x2+dx, W)]
                     cv2.imshow("check", beam_crop)
                     image = Image.fromarray(beam_crop)
-                    beam = ocr_recgn.perform_ocr(image)
-                    print(beam, "---")
+                    beam = ocr_recgn()
+                    check = beam.perform_ocr(beam_crop)
+                    print(check, "---")
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
