@@ -1,6 +1,6 @@
 import cv2
 from paddleocr import PaddleOCR, draw_ocr
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from PIL import Image
 
 # Initialize the OCR model
@@ -28,7 +28,4 @@ img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 im_show = draw_ocr(img, boxes, txts, scores)  # No need to specify font_path
 im_show = Image.fromarray(im_show)
 
-# Display the image with OCR results
-plt.imshow(im_show)
-plt.axis('off')
-plt.show()
+cv2.im_show("test", img)
