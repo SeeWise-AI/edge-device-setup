@@ -96,34 +96,21 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
 
         if ocr_model is not None:
             for box, cls_id in zip(boxes, clss):
-                print(box, "----box---")
-                print(cls_id, "------cls----")
                 if cls_id == 1:  
                     x1, y1, x2, y2 = map(int, box)
                     cropped_img = img[y1:y2, x1:x2]
+                    img_ = cv2.imread(cropped_img)
                     cv2.imshow("check", cropped_img)
                     if ocr_model[0] == 'easyocr':
                         result = ocr.readtext(cropped_img, allowlist='0123456789')
-                        print(result, "-------result------")
                         print(result[0], "------result[0]--------")
-                        for out in result:
-                            if len(out) >= 2:
-                                beam_val, beam_val_conf = out[1], out[2]
-                        print(beam_val, "---")
-                        # if result[0] is not None:
-                        #     print("Checking wait ...")
-                        #     text = " ".join([res[1] for res in result])
-                        #     print(text, "---")
-                        #     cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                        # else:
-                        #     print("beam id not found")
                     else:
-                        result = ocr.ocr(cropped_img)
-                        print(result, "---")
+                        result = ocr.ocr(img_)
                         if result[0] is not None:
                             text = " "
                             for line in result:
                                 for word_info in line:
+                                    print(word_info, "----")
                                     if isinstance(word_info, list) and len(word_info) > 1:
                                         text += word_info[1][0] + " "
                             

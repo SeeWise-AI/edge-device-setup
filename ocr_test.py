@@ -3,7 +3,8 @@ from paddleocr import PaddleOCR, draw_ocr
 # import matplotlib.pyplot as plt
 from PIL import Image
 
-# Initialize the OCR model
+
+
 ocr = PaddleOCR(use_angle_cls=True, lang='en')  # Use 'ch' for Chinese and 'en' for English
 
 # Read the image
@@ -25,10 +26,3 @@ scores = [res[1][1] for res in result[0]]
 print(scores, "---")
 print( "Beam no", txts)
 
-# Visualize the results
-img = cv2.imread(img_path)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-# im_show = draw_ocr(img, boxes, txts, scores)  # No need to specify font_path
-# im_show = Image.fromarray(im_show)
-
-cv2.imshow("test", img)
