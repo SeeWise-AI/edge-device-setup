@@ -5,13 +5,12 @@ from PIL import Image
 
 
 class ocr_recgn:
-    def __init__(img_path):
-        self.ocr = PaddleOCR(use_angle_cls=True, lang='en')
-        self.path = img_path
+    def __init__(self):
+        self.ocr_reader = PaddleOCR(use_angle_cls=True, lang='en')
     
-    def perform_ocr(self):
+    def perform_ocr(self, frame):
         # img = cv2.imread(self.path)
-        result = self.ocr.ocr(self.path, cls=True)
+        result = self.ocr_reader.ocr(frame, cls=True)
         
         highest_conf = 0
         beam_no_with_highest_conf = ""
