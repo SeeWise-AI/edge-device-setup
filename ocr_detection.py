@@ -5,8 +5,8 @@ from PIL import Image
 
 
 class ocr_recgn:
-    def __init__(self):
-        self.ocr_reader = PaddleOCR(use_angle_cls=True, lang='en')
+    def __init__(self, ocr):
+        self.ocr_reader = ocr
     
     def perform_ocr(self, frame):
         # img = cv2.imread(self.path)
@@ -21,7 +21,5 @@ class ocr_recgn:
                 if conf > highest_conf:
                     highest_conf = conf
                     beam_no_with_highest_conf = beam_no
-
-        print("Beam number with the highest confidence:", beam_no_with_highest_conf)
-        print("Confidence:", highest_conf)
+        return beam_no
 

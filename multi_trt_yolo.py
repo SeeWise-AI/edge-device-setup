@@ -77,6 +77,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
     fps = 0.0
     tic = time.time()
 
+    ocr_reader = PaddleOCR(use_angle_cls=True, lang='en')
+
     while True:
         if cv2.getWindowProperty(window_name, 0) < 0:
             break
@@ -90,10 +92,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
                 if cls_id == 1:  
                     x1, y1, x2, y2 = map(int, box)
                     cropped_img = img[y1:y2, x1:x2]
-                    cv2.imshow("check", cropped_img)
-                    beam = ocr_recgn()
+                    beam = ocr_recgn(ocr_reader)
                     check = beam.perform_ocr(cropped_img)
-                    print(check, "---")
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
