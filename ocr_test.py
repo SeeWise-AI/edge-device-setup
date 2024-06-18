@@ -28,4 +28,4 @@ img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 # im_show = draw_ocr(img, boxes, txts, scores)  # No need to specify font_path
 # im_show = Image.fromarray(im_show)
 
-cv2.im_show("test", img)
+cv2.imshow("test", img)
