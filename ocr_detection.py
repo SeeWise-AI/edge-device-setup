@@ -21,5 +21,5 @@ class ocr_recgn:
                 if conf > highest_conf:
                     highest_conf = conf
                     beam_no_with_highest_conf = beam_no
-        return beam_no
+        return beam_no_with_highest_conf
 

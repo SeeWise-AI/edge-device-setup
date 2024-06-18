@@ -94,6 +94,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
                     cropped_img = img[y1:y2, x1:x2]
                     beam = ocr_recgn(ocr_reader)
                     check = beam.perform_ocr(cropped_img)
+                    print("Beam No:", check)
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
