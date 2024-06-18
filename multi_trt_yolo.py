@@ -20,6 +20,7 @@ from utils.display import open_window, set_display, show_fps
 from utils.visualization import BBoxVisualization
 from utils.yolo_with_plugins import TrtYOLO
 from paddleocr import PaddleOCR
+from ocr_detection import ocr_recgn
 import easyocr
 
 WINDOW_NAME = 'TrtYOLODemo'
@@ -57,8 +58,6 @@ def parse_args():
         help='list of camera paths')
     parser.add_argument('-mp','--model_path', type=str, nargs='+', required=True,
         help='list of model path and should be came in the order of camera')
-    parser.add_argument('-ocr','--ocr_model', type=str, nargs='+', required=False,
-        help='OCR model needs to shared if you need to perform ocr')
     args = parser.parse_args()
     return args
 
@@ -77,14 +76,6 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
     fps = 0.0
     tic = time.time()
 
-    if ocr_model is not None:
-        if ocr_model[0] == 'easyocr':
-            print("Initializing easyocr....")
-            ocr = easyocr.Reader(['en'], gpu=True)
-        else:
-            print("Initializing paddle ocr....")
-            ocr = PaddleOCR(use_angle_cls=True, lang='en')
-
     while True:
         if cv2.getWindowProperty(window_name, 0) < 0:
             break
@@ -94,33 +85,12 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None):
         
         boxes, confs, clss = trt_yolo.detect(img, conf_th)
 
-        if ocr_model is not None:
-            for box, cls_id in zip(boxes, clss):
-                if cls_id == 1:  
-                    x1, y1, x2, y2 = map(int, box)
-                    cropped_img = img[y1:y2, x1:x2]
-                    img_ = cv2.imread(cropped_img)
-                    cv2.imshow("check", cropped_img)
-                    if ocr_model[0] == 'easyocr':
-                        result = ocr.readtext(cropped_img, allowlist='0123456789')
-                        print(result[0], "------result[0]--------")
-                    else:
-                        result = ocr.ocr(img_)
-                        if result[0] is not None:
-                            text = " "
-                            for line in result:
-                                for word_info in line:
-                                    print(word_info, "----")
-                                    if isinstance(word_info, list) and len(word_info) > 1:
-                                        text += word_info[1][0] + " "
-                            
-                            text = text.strip()
-
-                            cv2.putText(img, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                        else:
-                            print("Beam id is not found..")
-
-                    
+        for box, cls_id in zip(boxes, clss):
+            if cls_id == 1:  
+                x1, y1, x2, y2 = map(int, box)
+                cropped_img = img[y1:y2, x1:x2]
+                beam = ocr_recgn.perform_ocr(cropped_img)
+                print(beam, "---")
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
         img = show_fps(img, fps)
