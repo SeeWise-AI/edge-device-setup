@@ -215,7 +215,6 @@ class Camera():
         # Try to grab the 1st image and determine width and height
         _, self.img_handle = self.cap.read()
 
-        if self.share_frame:
             
            
 
