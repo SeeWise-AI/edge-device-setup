@@ -8,6 +8,7 @@ TensorRT optimized YOLO engine.
 import os
 import time
 import argparse
+import logging
 import multiprocessing as mp
 
 import cv2
