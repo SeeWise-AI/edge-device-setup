@@ -22,6 +22,8 @@ boxes = [res[0] for res in result[0]]
 txts = [res[1][0] for res in result[0]]
 scores = [res[1][1] for res in result[0]]
 
+print(scores, "---")
+
 # Visualize the results
 img = cv2.imread(img_path)
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
