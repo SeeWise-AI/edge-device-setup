@@ -25,7 +25,7 @@ scores = [res[1][1] for res in result[0]]
 # Visualize the results
 img = cv2.imread(img_path)
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-im_show = draw_ocr(img, boxes, txts, scores)  # No need to specify font_path
-im_show = Image.fromarray(im_show)
+# im_show = draw_ocr(img, boxes, txts, scores)  # No need to specify font_path
+# im_show = Image.fromarray(im_show)
 
 cv2.im_show("test", img)
