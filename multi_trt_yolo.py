@@ -21,6 +21,7 @@ from utils.visualization import BBoxVisualization
 from utils.yolo_with_plugins import TrtYOLO
 from paddleocr import PaddleOCR
 from ocr_detection import ocr_recgn
+from PIL import Image
 import easyocr
 
 WINDOW_NAME = 'TrtYOLODemo'
@@ -94,7 +95,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis, window_name, ocr_model = None, 
                     H, W = frame.shape[:2]
                     beam_crop = frame.copy()[max(0, y1-dy):min(y2+dy, H), max(0, x1-dx):min(x2+dx, W)]
                     cv2.imshow("check", beam_crop)
-                    beam = ocr_recgn.perform_ocr(beam_crop)
+                    image = Image.fromarray(beam_crop)
+                    beam = ocr_recgn.perform_ocr(image)
                     print(beam, "---")
 
         img = vis.draw_bboxes(img, boxes, confs, clss)
