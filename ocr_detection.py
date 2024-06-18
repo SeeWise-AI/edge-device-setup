@@ -10,7 +10,7 @@ class ocr_recgn:
         self.path = img_path
     
     def perform_ocr(self):
-        img = cv2.imread(self.path)
+        # img = cv2.imread(self.path)
         result = self.ocr.ocr(self.path, cls=True)
         
         highest_conf = 0
